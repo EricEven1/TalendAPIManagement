@@ -418,13 +418,13 @@ api-tryin: |-
         "projectId" : "21c71288-b184-4f8b-b335-4ca824fe2db6"
       },
       "variables" : {
-        "272e8a1f-cb83-4715-8c32-091381fb7022" : {
+        "0c8a908f-15df-405f-82b7-805a40ac8078" : {
           "name" : "BaseUrl",
           "value" : "https://ecckpdj69thuaik.eu.api-mocks.com",
           "enabled" : true,
           "private" : false
         },
-        "433bc437-57a2-423d-a1c6-29545105cf36" : {
+        "77abf4dc-2688-4051-9b4b-2918b72a9ae1" : {
           "name" : "Authentification\\\"Bearer\\\"HeaderAuthorization",
           "value" : "",
           "enabled" : true,
