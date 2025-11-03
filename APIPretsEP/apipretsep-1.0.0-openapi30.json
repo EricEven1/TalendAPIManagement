@@ -31,7 +31,8 @@
                   "items" : {
                     "type" : "string"
                   }
-                }
+                },
+                "example" : "{\n  \"idPret\": [\"455\", \"gr4545een\", \"bdghlue\"]\n}"
               }
             }
           },
@@ -62,7 +63,8 @@
                   "required" : [ "idPret" ],
                   "properties" : {
                     "idPret" : {
-                      "type" : "string"
+                      "type" : "string",
+                      "description" : "id de pret cree"
                     }
                   }
                 }
