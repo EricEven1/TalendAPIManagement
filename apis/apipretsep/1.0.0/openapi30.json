@@ -1,0 +1,281 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "APIPretsEP",
+    "description" : "API d'apprentissage \nLe 20/10/2025",
+    "contact" : {
+      "name" : "Eric Proust",
+      "email" : "eric.proust@even.fr"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://ecckpdj69thuaik.eu.api-mocks.com",
+    "description" : "URL du serveur du mock de votre API. Lorsqu'il est appelé, il simule le comportement de votre API."
+  } ],
+  "security" : [ {
+    "Authentification \"Bearer\"" : [ ]
+  } ],
+  "paths" : {
+    "/demandes" : {
+      "get" : {
+        "summary" : "Obtenir les demandes de prêts",
+        "description" : "Obtenir la liste de toutes les demandes de prêts qui vous sont accessibles",
+        "responses" : {
+          "200" : {
+            "description" : "Status 200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "4XX" : {
+            "$ref" : "#/components/responses/Erreur"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Soumettre une demande de prêt",
+        "description" : "Créer et soumettre une demande de prêt",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Demande"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Status 201",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "idPret" ],
+                  "properties" : {
+                    "idPret" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX" : {
+            "$ref" : "#/components/responses/Erreur"
+          }
+        }
+      }
+    },
+    "/demandes/{idPret}" : {
+      "get" : {
+        "summary" : "Obtenir une demande de prêt par ID",
+        "description" : "Obtenir une demande de prêt spécifique en utilisant son ID",
+        "responses" : {
+          "200" : {
+            "description" : "Status 200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Demande"
+                }
+              }
+            }
+          },
+          "4XX" : {
+            "$ref" : "#/components/responses/Erreur"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Mettre à jour une demande de prêt",
+        "description" : "Mettre à jour une demande de prêt existante",
+        "parameters" : [ {
+          "name" : "Demande",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/Demande"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Status 201"
+          },
+          "4XX" : {
+            "$ref" : "#/components/responses/Erreur"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Annuler une demande de prêt",
+        "description" : "Annuler une demande de prêt existant",
+        "responses" : {
+          "200" : {
+            "description" : "Status 200"
+          },
+          "4XX" : {
+            "$ref" : "#/components/responses/Erreur"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "idPret",
+        "in" : "path",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Adresse" : {
+        "type" : "object",
+        "properties" : {
+          "rue" : {
+            "type" : "string",
+            "example" : "ZI Traon Bihan"
+          },
+          "rue2" : {
+            "type" : "string"
+          },
+          "codePostal" : {
+            "type" : "string",
+            "example" : "29200"
+          },
+          "ville" : {
+            "type" : "string",
+            "example" : "Ploudaniel"
+          },
+          "etat" : {
+            "type" : "string",
+            "example" : "Californie"
+          }
+        },
+        "example" : "{\r\n\t\"rue\": \"3185 Gateway Avenue\",\r\n\t\"rue2\": \"\",\r\n\t\"codePostan\": \"93301\",\r\n\t\"ville\": \"Bakersfield\",\r\n\t\"etat\": \"CA\"\r\n}"
+      },
+      "Demande" : {
+        "type" : "object",
+        "required" : [ "detailPret", "etatApplication", "idPret", "infoDemandeur", "typePret" ],
+        "properties" : {
+          "idPret" : {
+            "type" : "string",
+            "readOnly" : true
+          },
+          "typePret" : {
+            "type" : "string",
+            "enum" : [ "Entreprise", "Personnel" ]
+          },
+          "infoDemandeur" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/Personne"
+            }, {
+              "$ref" : "#/components/schemas/Societe"
+            } ]
+          },
+          "etatApplication" : {
+            "type" : "string",
+            "readOnly" : true,
+            "enum" : [ "En attente", "Approuvée", "Rejetée" ]
+          },
+          "detailPret" : {
+            "type" : "object",
+            "required" : [ "duree", "mensualite", "montant" ],
+            "properties" : {
+              "montant" : {
+                "type" : "number"
+              },
+              "duree" : {
+                "type" : "integer"
+              },
+              "mensualite" : {
+                "type" : "number"
+              }
+            }
+          }
+        }
+      },
+      "Personne" : {
+        "type" : "object",
+        "required" : [ "Nom", "adresse", "prenom" ],
+        "properties" : {
+          "Nom" : {
+            "type" : "string"
+          },
+          "prenom" : {
+            "type" : "string"
+          },
+          "adresse" : {
+            "$ref" : "#/components/schemas/Adresse"
+          }
+        }
+      },
+      "Societe" : {
+        "type" : "object",
+        "required" : [ "adresse", "nomSociete", "typeSociete" ],
+        "properties" : {
+          "nomSociete" : {
+            "type" : "string"
+          },
+          "typeSociete" : {
+            "type" : "string",
+            "enum" : [ "SA", "SARL", "EURL", "GIE" ]
+          },
+          "adresse" : {
+            "$ref" : "#/components/schemas/Adresse"
+          }
+        }
+      }
+    },
+    "responses" : {
+      "Erreur" : {
+        "description" : "Erreur",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "example" : "Une erreur est survenue, réessayez ou contactez le Support"
+          }
+        }
+      }
+    },
+    "parameters" : {
+      "idPret" : {
+        "name" : "idPret",
+        "in" : "path",
+        "required" : true,
+        "description" : "Identifiant d'un prêt",
+        "schema" : {
+          "type" : "string",
+          "description" : "Identifiant d'un prêt"
+        }
+      }
+    },
+    "securitySchemes" : {
+      "Authentification__Bearer_" : {
+        "type" : "http",
+        "scheme" : "bearer"
+      },
+      "Basic_authentication" : {
+        "type" : "http",
+        "scheme" : "basic"
+      }
+    }
+  }
+}
